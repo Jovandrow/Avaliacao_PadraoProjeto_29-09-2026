@@ -1,0 +1,44 @@
+@startuml
+interface ComprovanteFiscal { +emitir(valor: double): String }
+interface Pagamento { +processar(valor: double): String }
+interface Voucher { +gerar(hospede: String, documento: String): String }
+interface FabricaPais {
+  +criarComprovante(): ComprovanteFiscal
+  +criarPagamento(): Pagamento
+  +criarVoucher(): Voucher
+}
+class NfsE
+class FaturaIva
+class PagamentoPix
+class PagamentoMbWay
+class VoucherCpf
+class VoucherNif
+class FabricaBrasil
+class FabricaPortugal
+class ConfirmacaoReserva {
+  -fabrica: FabricaPais
+  +ConfirmacaoReserva(fabrica: FabricaPais)
+  +confirmar(hospede: String, documento: String, valor: double): void
+}
+class Main
+
+ComprovanteFiscal <|.. NfsE
+ComprovanteFiscal <|.. FaturaIva
+Pagamento <|.. PagamentoPix
+Pagamento <|.. PagamentoMbWay
+Voucher <|.. VoucherCpf
+Voucher <|.. VoucherNif
+FabricaPais <|.. FabricaBrasil
+FabricaPais <|.. FabricaPortugal
+FabricaBrasil ..> NfsE : <<cria>>
+FabricaBrasil ..> PagamentoPix : <<cria>>
+FabricaBrasil ..> VoucherCpf : <<cria>>
+FabricaPortugal ..> FaturaIva : <<cria>>
+FabricaPortugal ..> PagamentoMbWay : <<cria>>
+FabricaPortugal ..> VoucherNif : <<cria>>
+ConfirmacaoReserva o--> FabricaPais
+ConfirmacaoReserva ..> ComprovanteFiscal
+ConfirmacaoReserva ..> Pagamento
+ConfirmacaoReserva ..> Voucher
+Main ..> ConfirmacaoReserva
+@enduml
